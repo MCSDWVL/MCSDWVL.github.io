@@ -1,0 +1,192 @@
+<html>
+<head>
+    <style>
+        .horizontalcontainer {
+            display: flex;
+        }
+        .guess {
+            width: 
+        }
+        #playagain {
+        }
+        .spoilerouter {
+            background-color: black;
+            border: 3px solid black;
+            width: 200px;
+        }
+        .inner {
+            width: 100%;
+            height: 100%px;
+            background-color: white;
+            visibility: visible;
+            filter: alpha(opacity=0);
+            text-align: center;
+            vertical-align: middle;
+        }
+        .cheating {
+            vertical-align: bottom;
+        }
+        #spoiler {
+            background-color: black;
+        }
+        .testNote {
+            border: 1px solid black;
+        }
+    </style>
+    <!-- stealin ur styles -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"/>
+</head>
+<body>
+    <h1>Interval Quiz</h1>
+    <div>
+        <div class="horizontalcontainer">
+            <div class="spoilerouter">
+                <div class="inner" id="spoiler">Interval: -</div>
+            </div>
+            <button id="playagain">Start!</button>
+            <button id="next">Next</button>
+        </div>
+        <div class="horizontalcontainer">
+            <button id="0" class="guess" data-guess=0>0</button>
+            <button id="1" class="guess" data-guess=1>1</button>
+            <button id="2" class="guess" data-guess=2>2</button>
+            <button id="3" class="guess" data-guess=3>3</button>
+            <button id="4" class="guess" data-guess=4>4</button>
+            <button id="5" class="guess" data-guess=5>5</button>
+            <button id="6" class="guess" data-guess=6>6</button>
+            <button id="7" class="guess" data-guess=7>7</button>
+            <button id="8" class="guess" data-guess=8>8</button>
+            <button id="9" class="guess" data-guess=9>9</button>
+            <button id="10" class="guess" data-guess=10>10</button>
+            <button id="11" class="guess" data-guess=11>11</button>
+            <button id="12" class="guess" data-guess=12>12</button>
+        </div>
+        <div id="score">Score: -</div>
+        <div id="streak">Streak -</div>
+        <div id="cheating">
+            <div>Here are some test notes, it's kinda cheating: </div>
+            <div class="horizontalcontainer">
+                <button id="tn0" class="testNote" data-guess=0>0</button>
+                <button id="tn1" class="testNote" data-guess=1>1</button>
+                <button id="tn2" class="testNote" data-guess=2>2</button>
+                <button id="tn3" class="testNote" data-guess=3>3</button>
+                <button id="tn4" class="testNote" data-guess=4>4</button>
+                <button id="tn5" class="testNote" data-guess=5>5</button>
+                <button id="tn6" class="testNote" data-guess=6>6</button>
+                <button id="tn7" class="testNote" data-guess=7>7</button>
+                <button id="tn8" class="testNote" data-guess=8>8</button>
+                <button id="tn9" class="testNote" data-guess=9>9</button>
+                <button id="tn10" class="testNote" data-guess=10>10</button>
+                <button id="tn11" class="testNote" data-guess=11>11</button>
+                <button id="tn12" class="testNote" data-guess=12>12</button>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.0.1/Tone.min.js"></script>
+    <script>
+        (function () {
+            // Membrane Synth https://tonejs.github.io/docs/r12/MembraneSynth
+            //const synth = new Tone.MembraneSynth().toMaster();
+            var synth = new Tone.Synth({
+                "oscillator": {
+                    "type": "sine",
+                    "modulationFrequency": 0.2
+                },
+                "envelope": {
+                    "attack": 0.02,
+                    "decay": 0.1,
+                    "sustain": 0.2,
+                    "release": 0.2,
+                }
+            }).toMaster();
+
+            //var polySynth = new Tone.PolySynth(4, synth).toMaster();
+
+            // Create an array of every piano key (88 halftones starting at 27.5 and increasing by 2^1/12 ratios).
+            // var notes = [27.5];
+            //for (halfStep = 1; halfStep < 88; ++halfStep) {
+            //    notes.push(notes[halfStep - 1] * Math.pow(2, 1 / 12));
+            //}
+
+            var notes = [220];
+            for (halfStep = 1; halfStep < 12; ++halfStep) {
+                notes.push(notes[halfStep - 1] * Math.pow(2, 1 / 12));
+            }
+
+            var firstNote = 0;
+            var secondNote = 0;
+            var correctCount = 0;
+            var total = 0;
+            var streak = 0;
+
+            // any key in the octave?
+            var maxRange = 12;
+
+            function playIntervalSequence(firstNote, secondNote) {
+                synth.triggerAttackRelease(notes[firstNote], ".5");
+                synth.triggerAttackRelease(notes[secondNote], ".5", "+1");
+            }
+
+            function playInterval() {
+                playIntervalSequence(firstNote, secondNote);
+                $('#spoiler').html("Interval: " + (secondNote - firstNote));
+                console.log("Interval" + (secondNote - firstNote));
+
+                // synth.triggerAttackRelease([firstNote, secondNote], 1);
+                // console.log(notes[firstNote] + " " + notes[secondNote]);
+            }
+
+            function setInterval() {
+                firstNote = Math.random() * notes.length | 0;
+                secondNote = firstNote + (Math.random() * maxRange | 0);
+                while (secondNote > notes.length - 1) {
+                    secondNote--;
+                    firstNote--;
+                }
+                total++;
+            }
+
+            /**
+              * Play Controls
+              */
+            $("#playagain").click(function () {
+                if (total == 0) {
+                    setInterval();
+                    $(this).html("Repeat Tone");
+                }
+                playInterval();
+            });
+            $("#next").click(function () {
+                $("#spoiler").css({ backgroundColor: 'black' })
+                $(".spoilerouter").css({ border: "3px solid black" });
+                $("#tn" + firstNote).css({ border: "1px solid black" });
+                $("#tn" + secondNote).css({ border: "1px solid black" });
+                setInterval();
+                playInterval();
+            });
+            $(".guess").click(function () {1
+                guess = $(this).data("guess");
+                correct = guess == secondNote - firstNote;
+                if (total > 0) {
+                    if (correct) {
+                        correctCount++;
+                        streak++;
+                    } else {
+                        streak = 0;
+                    }
+                }
+                $(".spoilerouter").css({ border: "3px solid " + (correct ? "green" : "red") });
+                $("#spoiler").css({ backgroundColor: 'white' })
+                $('#score').html("Score: " + correctCount + "/" + total);
+                $('#streak').html("Streak: " + streak);
+                $("#tn" + firstNote).css({ border: "1px solid " + (correct ? "green" : "red") });
+                $("#tn" + secondNote).css({ border: "1px solid " + (correct ? "green" : "red") });
+            });
+            $(".testNote").click(function () {
+                synth.triggerAttackRelease(notes[0] * Math.pow(Math.pow(2, 1 / 12),$(this).data("guess")), ".5");
+            }); 
+        })();
+    </script>
+</body>
+</html>
