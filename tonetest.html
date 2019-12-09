@@ -139,10 +139,12 @@
 
             function setInterval() {
                 firstNote = Math.random() * notes.length | 0;
-                secondNote = firstNote + (Math.random() * maxRange | 0);
-                while (secondNote > notes.length - 1) {
-                    secondNote--;
-                    firstNote--;
+                secondNote = Math.random() * notes.length | 0;
+                if (firstNote > secondNote)
+                {
+                    temp = secondNote;
+                    secondNote = firstNote;
+                    firstNote = temp;
                 }
                 total++;
             }
