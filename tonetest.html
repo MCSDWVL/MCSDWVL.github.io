@@ -160,8 +160,8 @@
             $("#next").click(function () {
                 $("#spoiler").css({ backgroundColor: 'black' })
                 $(".spoilerouter").css({ border: "3px solid black" });
-                $("#tn" + firstNote).css({ border: "1px solid black" });
-                $("#tn" + secondNote).css({ border: "1px solid black" });
+                $("#tn" + firstNote).css({ border: "3px solid black" });
+                $("#tn" + secondNote).css({ border: "3px solid black" });
                 setInterval();
                 playInterval();
             });
@@ -180,8 +180,8 @@
                 $("#spoiler").css({ backgroundColor: 'white' })
                 $('#score').html("Score: " + correctCount + "/" + total);
                 $('#streak').html("Streak: " + streak);
-                $("#tn" + firstNote).css({ border: "1px solid " + (correct ? "green" : "red") });
-                $("#tn" + secondNote).css({ border: "1px solid " + (correct ? "green" : "red") });
+                $("#tn" + firstNote).css({ border: "3px solid " + (correct ? "green" : "red") });
+                $("#tn" + secondNote).css({ border: "3px solid " + (correct ? "green" : "red") });
             });
             $(".testNote").click(function () {
                 synth.triggerAttackRelease(notes[0] * Math.pow(Math.pow(2, 1 / 12),$(this).data("guess")), ".5");
