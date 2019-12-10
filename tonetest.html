@@ -21,6 +21,7 @@
             visibility: visible;
             filter: alpha(opacity=0);
             text-align: center;
+            color: black;
             vertical-align: middle;
         }
         .cheating {
@@ -66,6 +67,10 @@
         <div id="cheating">
             <div>Here are some test notes, it's kinda cheating: </div>
             <div class="horizontalcontainer">
+                <button id="playagain1" class="testNote">Replay 1st Tone</button>
+                <button id="playagain2" class="testNote">Replay 2nd Tone</button>
+            </div>
+            <div class="horizontalcontainer">
                 <button id="tn0" class="testNote" data-guess=0>0</button>
                 <button id="tn1" class="testNote" data-guess=1>1</button>
                 <button id="tn2" class="testNote" data-guess=2>2</button>
@@ -81,7 +86,38 @@
                 <button id="tn12" class="testNote" data-guess=12>12</button>
             </div>
         </div>
-    </div>
+        <div id="notes">
+            <div class="horizontalcontainer">
+                <ol>
+                    <li>minor second</li>
+                    <li>major second</li>
+                    <li>minor third</li>
+                    <li>major third</li>
+                    <li>perfect fourth</li>
+                    <li>tritone (augmented 4th, diminished 5th)</li>
+                    <li>perfect fifth</li>
+                    <li>minor sixth</li>
+                    <li>major sixth</li>
+                    <li>minor 7th</li>
+                    <li>major 7th</li>
+                    <li>octave</li>
+                </ol>
+                <ol>
+                    <li>duh-nuh from jaws</li>
+                    <li>happy birthday</li>
+                    <li>>greensleeves</li>
+                    <li>when the saints go marching in, swing low sweet chariot</li>
+                    <li>amazing grace</li>
+                    <li>(the simp) - sooooons (sons is another half step up)</li>
+                    <li>twinkle twinkle little star</li>
+                    <li>entertainer, we are young: set the world on (fiii-yerrrr)</li>
+                    <li>my bonny lies over the ocean, NBC</li>
+                    <li>star trek original theme "oooo aaaaa" part, willy wonka "(COME) with (ME)" (0-3-10)</li>
+                    <li>take on me "(take MEEEEE) on!"</li>
+                    <li>octave</li>
+                </ol>
+            </div>
+        </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/13.0.1/Tone.min.js"></script>
     <script>
@@ -110,7 +146,7 @@
             //}
 
             var notes = [220];
-            for (halfStep = 1; halfStep < 12; ++halfStep) {
+            for (halfStep = 1; halfStep <= 12; ++halfStep) {
                 notes.push(notes[halfStep - 1] * Math.pow(2, 1 / 12));
             }
 
@@ -124,8 +160,8 @@
             var maxRange = 12;
 
             function playIntervalSequence(firstNote, secondNote) {
-                synth.triggerAttackRelease(notes[firstNote], ".5");
-                synth.triggerAttackRelease(notes[secondNote], ".5", "+1");
+                synth.triggerAttackRelease(notes[firstNote], ".3");
+                synth.triggerAttackRelease(notes[secondNote], ".3", "+.5");
             }
 
             function playInterval() {
@@ -186,8 +222,14 @@
                 $("#tn" + secondNote).css({ border: "2px solid " + (correct ? "green" : "red") });
             });
             $(".testNote").click(function () {
-                synth.triggerAttackRelease(notes[0] * Math.pow(Math.pow(2, 1 / 12),$(this).data("guess")), ".5");
-            }); 
+                synth.triggerAttackRelease(notes[$(this).data("guess")], ".3");
+            });
+            $("#playagain1").click(function () {
+                synth.triggerAttackRelease(notes[firstNote], ".3");
+            });
+            $("#playagain2").click(function () {
+                synth.triggerAttackRelease(notes[secondNote], ".3");
+            });
         })();
     </script>
 </body>
