@@ -1,5 +1,5 @@
 const targets = [
-  'FakeWords',
+  'WordGuesser', // Local project folder: FakeWords
   'FiftyFifty',
   'OnePageGames',
   'LoopDeck',
