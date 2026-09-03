@@ -21,13 +21,16 @@ const headers = {
   'User-Agent': 'mcsdwvl-games-gallery',
 };
 
-const response = await fetch('https://api.github.com/user/repos?affiliation=owner&per_page=100', { headers });
+const response = await fetch('https://api.github.com/users/mcsdwvl/repos?type=owner&per_page=100', { headers });
 if (!response.ok) throw new Error(`Could not list repositories: ${response.status} ${response.statusText}`);
 const repositories = await response.json();
 
 for (const target of targets) {
   const repository = repositories.find((item) => item.name.toLowerCase() === target.toLowerCase());
-  if (!repository) throw new Error(`Repository not found: ${target}`);
+  if (!repository) {
+    console.warn(`Skipped: mcsdwvl/${target} was not found.`);
+    continue;
+  }
   const topics = [...new Set([...(repository.topics || []), 'web-game'])];
   const update = await fetch(`https://api.github.com/repos/${repository.full_name}/topics`, {
     method: 'PUT',
