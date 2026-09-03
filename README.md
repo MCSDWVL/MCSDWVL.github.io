@@ -3,6 +3,8 @@ http://mcsdwvl.github.io
 
 ## Games directory
 
+See [Adding a game](docs/adding-games.md) for the publishing checklist.
+
 `/games/` is generated daily from public `mcsdwvl` repositories tagged
 `web-game`. A tagged repository normally becomes one card pointing at its
 Pages root. To list more than one game from a repository, add a root
