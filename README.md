@@ -11,3 +11,6 @@ Pages root. To list more than one game from a repository, add a root
 
 Use `gallery.config.json` to arrange promoted game IDs (`repository:path`)
 before the remaining cards, which are ordered by repository creation date.
+
+To apply the initial topic set, authenticate with GitHub in Git Bash and run
+`GITHUB_TOKEN="$(printf "protocol=https\\nhost=github.com\\nusername=MCSDWVL\\n\\n" | git credential fill | sed -n 's/^password=//p')" node scripts/tag-existing-games.mjs`.
