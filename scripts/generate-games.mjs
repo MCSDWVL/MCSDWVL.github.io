@@ -69,6 +69,17 @@ export function gamesFromManifest(repository, manifest, reportInvalid = () => {}
   return games;
 }
 
+export function applyFeaturedOrdering(games, featuredIds) {
+  const featured = new Map(featuredIds.map((id, index) => [id, index]));
+  return games
+    .map((game) => ({ ...game, featured: featured.has(game.id) }))
+    .sort((a, b) => {
+      const aPosition = featured.get(a.id) ?? Number.MAX_SAFE_INTEGER;
+      const bPosition = featured.get(b.id) ?? Number.MAX_SAFE_INTEGER;
+      return aPosition - bPosition || new Date(b.createdAt) - new Date(a.createdAt);
+    });
+}
+
 async function fetchJson(url) {
   const headers = { Accept: 'application/vnd.github+json', 'User-Agent': 'mcsdwvl-games-gallery' };
   if (process.env.GITHUB_TOKEN) headers.Authorization = `Bearer ${process.env.GITHUB_TOKEN}`;
@@ -128,9 +139,8 @@ async function build() {
     }
   }
   for (const game of games) game.thumbnailUrl = await copyThumbnail(game) || 'assets/placeholder.svg';
-  const featured = new Map((config.featured || []).map((id, index) => [id, index]));
-  games.sort((a, b) => (featured.has(a.id) ? featured.get(a.id) : Number.MAX_SAFE_INTEGER) - (featured.has(b.id) ? featured.get(b.id) : Number.MAX_SAFE_INTEGER) || new Date(b.createdAt) - new Date(a.createdAt));
-  await writeFile(path.join(galleryOutput, 'games.json'), `${JSON.stringify(games, null, 2)}\n`);
+  const orderedGames = applyFeaturedOrdering(games, config.featured || []);
+  await writeFile(path.join(galleryOutput, 'games.json'), `${JSON.stringify(orderedGames, null, 2)}\n`);
   await Promise.all([
     cp(path.join(root, 'games', 'index.html'), path.join(galleryOutput, 'index.html')),
     cp(path.join(root, 'games', 'styles.css'), path.join(galleryOutput, 'styles.css')),
@@ -138,7 +148,7 @@ async function build() {
     cp(path.join(root, 'games', 'assets', 'placeholder.svg'), path.join(galleryOutput, 'assets', 'placeholder.svg')),
   ]);
   if (errors.length) console.warn(`Skipped invalid game entries:\n${errors.join('\n')}`);
-  console.log(`Generated ${games.length} games.`);
+  console.log(`Generated ${orderedGames.length} games.`);
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) build();

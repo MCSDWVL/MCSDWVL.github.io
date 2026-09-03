@@ -16,7 +16,15 @@
       <input id="search" type="search" placeholder="Search titles and tags" autocomplete="off">
     </header>
     <p id="status" class="status" aria-live="polite"></p>
-    <section id="games" class="grid" aria-label="Games"></section>
+    <section id="featured-section" class="game-section" aria-labelledby="featured-heading">
+      <h2 id="featured-heading">Featured</h2>
+      <div id="featured-games" class="grid" aria-label="Featured games"></div>
+    </section>
+    <section id="all-games-section" class="game-section" aria-labelledby="all-games-heading">
+      <h2 id="all-games-heading">All games</h2>
+      <div id="all-games" class="grid" aria-label="All games"></div>
+    </section>
+    <p id="no-results" class="no-results" hidden>No games match that search.</p>
   </main>
   <footer>
     <span>Matthew Vassilakos</span><a href="mailto:matthew.vassilakos@gmail.com">matthew.vassilakos@gmail.com</a><a href="https://x.com/mvassilakos">@mvassilakos</a>

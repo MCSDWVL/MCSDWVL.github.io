@@ -1,4 +1,8 @@
-const grid = document.querySelector('#games');
+const featuredGrid = document.querySelector('#featured-games');
+const allGamesGrid = document.querySelector('#all-games');
+const featuredSection = document.querySelector('#featured-section');
+const allGamesSection = document.querySelector('#all-games-section');
+const noResults = document.querySelector('#no-results');
 const status = document.querySelector('#status');
 const search = document.querySelector('#search');
 let games = [];
@@ -31,7 +35,13 @@ function card(game) {
 function render() {
   const term = search.value.toLowerCase().trim();
   const visible = games.filter((game) => [game.title, game.description, ...game.tags].join(' ').toLowerCase().includes(term));
-  grid.replaceChildren(...visible.map(card));
+  const featuredGames = visible.filter((game) => game.featured);
+  const allGames = visible.filter((game) => !game.featured);
+  featuredGrid.replaceChildren(...featuredGames.map(card));
+  allGamesGrid.replaceChildren(...allGames.map(card));
+  featuredSection.hidden = featuredGames.length === 0;
+  allGamesSection.hidden = allGames.length === 0;
+  noResults.hidden = visible.length !== 0;
   status.textContent = `${visible.length} ${visible.length === 1 ? 'game' : 'games'}`;
 }
 
