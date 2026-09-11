@@ -6,12 +6,14 @@ const noResults = document.querySelector('#no-results');
 const status = document.querySelector('#status');
 const search = document.querySelector('#search');
 let games = [];
+const catalogUrl = document.body.dataset.catalogUrl || 'games.json';
+const assetBase = document.body.dataset.assetBase || '';
 
 function card(game) {
   const article = document.createElement('article');
   article.className = 'card';
   const image = document.createElement('img');
-  image.src = game.thumbnailUrl;
+  image.src = `${assetBase}${game.thumbnailUrl}`;
   image.alt = '';
   image.loading = 'lazy';
   const body = document.createElement('div');
@@ -45,5 +47,5 @@ function render() {
   status.textContent = `${visible.length} ${visible.length === 1 ? 'game' : 'games'}`;
 }
 
-fetch('games.json').then((response) => response.json()).then((data) => { games = data; render(); }).catch(() => { status.textContent = 'Games are unavailable right now.'; });
+fetch(catalogUrl).then((response) => response.json()).then((data) => { games = data; render(); }).catch(() => { status.textContent = 'Games are unavailable right now.'; });
 search.addEventListener('input', render);

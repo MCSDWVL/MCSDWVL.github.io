@@ -1,8 +1,38 @@
-Matthew Vassilakos | matthew.vassilakos@gmail.com | <a href="https://www.facebook.com/matthew.vassilakos">Facebook</a> | <a href="https://www.linkedin.com/in/vassilakos">Linkedin</a> | <a href="https://github.com/MCSDWVL">GitHub</a> | <a href="https://twitter.com/MattVassilakos">@mattvassilakos</a>
-<br/>
-<br/>projects:
-<ul>
-	<li><a href="/to11/">to11</a> - a puzzle version of 2048
-	<li><a href="/words-with-snakes/">words-with-snakes</a> - a mashup of scrabble and snake!
-	<li><a href="/games/">games</a> - browse my browser games
-</ul>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Games — Matthew Vassilakos</title>
+  <link rel="stylesheet" href="games/styles.css">
+</head>
+<body data-catalog-url="games/games.json" data-asset-base="games/">
+  <main>
+    <header class="site-header">
+      <span>Matthew Vassilakos</span>
+      <nav aria-label="Personal links">
+        <a href="mailto:matthew.vassilakos@gmail.com">matthew.vassilakos@gmail.com</a>
+        <a href="https://www.linkedin.com/in/vassilakos">LinkedIn</a>
+        <a href="https://twitter.com/MattVassilakos">@mattvassilakos</a>
+      </nav>
+    </header>
+    <header class="hero">
+      <h1>Games</h1>
+      <p>Small browser games, puzzles, and experiments.</p>
+      <label class="search-label" for="search">Find a game</label>
+      <input id="search" type="search" placeholder="Search titles and tags" autocomplete="off">
+    </header>
+    <p id="status" class="status" aria-live="polite"></p>
+    <section id="featured-section" class="game-section" aria-labelledby="featured-heading">
+      <h2 id="featured-heading">Featured</h2>
+      <div id="featured-games" class="grid" aria-label="Featured games"></div>
+    </section>
+    <section id="all-games-section" class="game-section" aria-labelledby="all-games-heading">
+      <h2 id="all-games-heading">All games</h2>
+      <div id="all-games" class="grid" aria-label="All games"></div>
+    </section>
+    <p id="no-results" class="no-results" hidden>No games match that search.</p>
+  </main>
+  <script src="games/app.js"></script>
+</body>
+</html>
